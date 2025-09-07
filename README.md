@@ -170,34 +170,12 @@ npm start
 3. **Sistema de comunicación** → Notificaciones automáticas entre usuarios
 4. **Seguimiento estadístico** → Dashboard con métricas del sistema
 
-## 👨‍💻 Desarrollo
-
-### **Comandos Útiles**
-
-**Backend:**
-```bash
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py collectstatic
-```
-
-**Frontend:**
-```bash
-npm run build      # Compilar para producción
-npm run test       # Ejecutar tests
-npm run lint       # Verificar código
-```
-
 ## 📝 Licencia
 
-Proyecto académico desarrollado para la Universidad Católica del Norte (UCN).
+Proyecto académico desarrollado libremente para la Universidad Católica del Norte (UCN).
 
 ## 🤝 Contribución
 
 Este es un proyecto académico. Para contribuciones, por favor contacta al equipo de desarrollo.
 
 ---
-
-**🎓 Desarrollado para Prácticas Profesionales UCN**  
-*Sistema completo de gestión con tecnologías modernas*
