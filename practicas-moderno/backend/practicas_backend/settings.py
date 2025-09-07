@@ -62,6 +62,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'practicas_backend.wsgi.application'
 
 # Database
+# Custom User Model
+AUTH_USER_MODEL = 'usuarios.Usuario'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

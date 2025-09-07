@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Usuario, Vacante, Postulacion, Informe, Notificacion, Estadisticas } from '../types';
+import { Usuario, Vacante, Postulacion, Informe, Notificacion, Estadisticas } from '../types/index.ts';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -53,7 +53,27 @@ export const informesAPI = {
 export const notificacionesAPI = {
   getAll: () => api.get<Notificacion[]>('/notificaciones/'),
   getByUsuario: (usuarioId: number) => api.get<Notificacion[]>(`/notificaciones/?usuario=${usuarioId}`),
-  marcarLeida: (id: number) => api.patch(`/notificaciones/${id}/`, { leida: true }),
+  marcarLeida: (id: number) => api.patch(`/notificaciones/${id}/marcar_leida/`),
+  create: (data: Partial<Notificacion>) => api.post<Notificacion>('/notificaciones/', data),
+};
+
+// Estadísticas
+export const estadisticasAPI = {
+  getGenerales: async () => {
+    const [usuarios, vacantes, postulaciones, informes] = await Promise.all([
+      usuariosAPI.getEstadisticas(),
+      api.get('/vacantes/estadisticas/'),
+      api.get('/postulaciones/estadisticas/'),
+      api.get('/informes/estadisticas/')
+    ]);
+    
+    return {
+      ...usuarios.data,
+      ...vacantes.data,
+      ...postulaciones.data,
+      ...informes.data
+    };
+  }
 };
 
 export default api;

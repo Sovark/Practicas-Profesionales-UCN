@@ -3,8 +3,9 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Plus, User, Building2 } from 'lucide-react';
-import { usuariosAPI, vacantesAPI, postulacionesAPI } from '../services/api';
-import { Usuario, Vacante } from '../types';
+import { usuariosAPI, vacantesAPI, postulacionesAPI } from '../services/api.ts';
+import api from '../services/api.ts';
+import { Usuario, Vacante } from '../types/index.ts';
 
 interface UsuarioForm {
   username: string;
@@ -26,10 +27,23 @@ const UsuariosPage: React.FC = () => {
   const [selectedEstudiante, setSelectedEstudiante] = useState<number | null>(null);
   
   // Queries
-  const { data: usuarios = [] } = useQuery('usuarios', usuariosAPI.getAll);
-  const { data: vacantes = [] } = useQuery('vacantes', vacantesAPI.getAll);
-  const { data: estudiantes = [] } = useQuery('estudiantes', usuariosAPI.getEstudiantes);
-  const { data: empresas = [] } = useQuery('empresas', usuariosAPI.getEmpresas);
+  const { data: usuariosData, error: usuariosError } = useQuery('usuarios', usuariosAPI.getAll);
+  const { data: vacantesData } = useQuery('vacantes', vacantesAPI.getAll);
+  const { data: estudiantesData } = useQuery('estudiantes', usuariosAPI.getEstudiantes);
+  const { data: empresasData } = useQuery('empresas', usuariosAPI.getEmpresas);
+  
+  // Debug
+  console.log('Usuarios data:', usuariosData);
+  console.log('Usuarios error:', usuariosError);
+  
+  const usuarios = Array.isArray(usuariosData?.data) ? usuariosData.data : [];
+  const vacantes = vacantesData?.data?.results || [];
+  const estudiantes = Array.isArray(estudiantesData?.data) ? estudiantesData.data : [];
+  const empresas = Array.isArray(empresasData?.data) ? empresasData.data : [];
+  
+  // Debug vacantes
+  console.log('Vacantes data:', vacantesData);
+  console.log('Vacantes array:', vacantes);
 
   // Forms
   const usuarioForm = useForm<UsuarioForm>();
@@ -50,10 +64,14 @@ const UsuariosPage: React.FC = () => {
   const crearVacante = useMutation(vacantesAPI.create, {
     onSuccess: () => {
       queryClient.invalidateQueries('vacantes');
+      queryClient.refetchQueries('vacantes');
       vacanteForm.reset();
       toast.success('Vacante creada exitosamente');
     },
-    onError: () => toast.error('Error al crear vacante'),
+    onError: (error) => {
+      console.error('Error creating vacante:', error);
+      toast.error('Error al crear vacante');
+    },
   });
 
   const crearPostulacion = useMutation(postulacionesAPI.create, {
@@ -63,6 +81,21 @@ const UsuariosPage: React.FC = () => {
     },
     onError: () => toast.error('Error al enviar postulación'),
   });
+
+  const { data: postulacionesData } = useQuery('postulaciones', postulacionesAPI.getAll);
+  const postulaciones = postulacionesData?.data?.results || [];
+
+  const actualizarPostulacion = useMutation(
+    ({ id, estado }: { id: number; estado: string }) => 
+      api.patch(`/postulaciones/${id}/`, { estado }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('postulaciones');
+        toast.success('Estado actualizado');
+      },
+      onError: () => toast.error('Error al actualizar estado'),
+    }
+  );
 
   const onSubmitUsuario = (data: UsuarioForm) => {
     crearUsuario.mutate(data);
@@ -218,13 +251,23 @@ const UsuariosPage: React.FC = () => {
 
         {/* Lista de Vacantes */}
         <div className="grid gap-4">
-          {vacantes.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
-              No hay vacantes disponibles. ¡Crea la primera!
-            </p>
-          ) : (
-            vacantes.map((vacante) => {
-              const empresa = usuarios.find(u => u.id === vacante.empresa);
+          {(() => {
+            const vacantesDisponibles = vacantes.filter(vacante => {
+              const tienePostulacionAceptada = postulaciones.some(
+                p => p.vacante === vacante.id && p.estado === 'aceptada'
+              );
+              return !tienePostulacionAceptada;
+            });
+            
+            return vacantesDisponibles.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">
+                No hay vacantes disponibles. ¡Crea la primera!
+              </p>
+            ) : (
+              vacantesDisponibles.map((vacante) => {
+              console.log('Vacante completa:', JSON.stringify(vacante, null, 2));
+              console.log('empresa_nombre:', vacante.empresa_nombre);
+              console.log('empresa ID:', vacante.empresa);
               return (
                 <div key={vacante.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex justify-between items-start">
@@ -232,7 +275,7 @@ const UsuariosPage: React.FC = () => {
                       <h3 className="font-semibold text-lg">{vacante.titulo}</h3>
                       <p className="text-gray-600 mt-1">{vacante.descripcion}</p>
                       <p className="text-sm text-gray-500 mt-2">
-                        🏢 {empresa?.nombre_completo || empresa?.username || 'Empresa no encontrada'}
+                        🏢 {vacante.empresa_nombre || 'Empresa no encontrada'}
                       </p>
                     </div>
                     <button
@@ -242,6 +285,57 @@ const UsuariosPage: React.FC = () => {
                     >
                       Postularse
                     </button>
+                  </div>
+                </div>
+              );
+            })
+          );
+          })()
+          }
+        </div>
+      </div>
+
+      {/* Gestión de Postulaciones */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-lg font-semibold mb-4">📋 Gestión de Postulaciones</h2>
+        <div className="space-y-4">
+          {postulaciones.length === 0 ? (
+            <p className="text-gray-500 text-center py-4">
+              No hay postulaciones. ¡Crea algunas primero!
+            </p>
+          ) : (
+            postulaciones.map((postulacion) => {
+              const estudiante = estudiantes.find(e => e.id === postulacion.estudiante);
+              const vacante = vacantes.find(v => v.id === postulacion.vacante);
+              return (
+                <div key={postulacion.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h4 className="font-medium">
+                        {estudiante?.nombre_completo || estudiante?.username} → {vacante?.titulo}
+                      </h4>
+                      <p className="text-sm text-gray-500">
+                        Estado actual: <span className={`font-medium ${
+                          postulacion.estado === 'aceptada' ? 'text-green-600' :
+                          postulacion.estado === 'rechazada' ? 'text-red-600' :
+                          'text-yellow-600'
+                        }`}>{postulacion.estado}</span>
+                      </p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => actualizarPostulacion.mutate({ id: postulacion.id, estado: 'aceptada' })}
+                        className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                      >
+                        ✅ Aceptar
+                      </button>
+                      <button
+                        onClick={() => actualizarPostulacion.mutate({ id: postulacion.id, estado: 'rechazada' })}
+                        className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+                      >
+                        ❌ Rechazar
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -272,7 +366,7 @@ const UsuariosPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {usuarios.map((usuario) => (
+              {(usuarios.length > 0 ? usuarios : [...estudiantes, ...empresas]).map((usuario) => (
                 <tr key={usuario.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
