@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prácticas Profesionales UCN - Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    🎓 Prácticas Profesionales UCN
+                </h1>
+                <p class="text-gray-600 mt-2">Sistema completo de gestión de prácticas</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="bg-white border-b">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex space-x-8">
+                    <button class="px-1 py-4 border-b-2 border-blue-500 text-blue-600 font-medium">
+                        👥 Usuarios & Vacantes
+                    </button>
+                    <button class="px-1 py-4 text-gray-500 hover:text-gray-700">
+                        📋 Informes
+                    </button>
+                    <button class="px-1 py-4 text-gray-500 hover:text-gray-700">
+                        🔔 Notificaciones
+                    </button>
+                    <button class="px-1 py-4 text-gray-500 hover:text-gray-700">
+                        📊 Estadísticas
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 px-4">
+            <!-- Success Message -->
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center">
+                    <div class="text-green-600 mr-3">✅</div>
+                    <div>
+                        <h3 class="text-green-800 font-semibold">¡Proyecto Completado!</h3>
+                        <p class="text-green-700">Todos los módulos han sido implementados exitosamente.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Usuarios -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-500 rounded-lg p-3">
+                            <span class="text-white text-xl">👥</span>
+                        </div>
+                        <h3 class="ml-3 text-lg font-semibold">Gestión de Usuarios</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>✅ Registro de estudiantes</li>
+                        <li>✅ Registro de empresas</li>
+                        <li>✅ Roles diferenciados</li>
+                        <li>✅ Autenticación</li>
+                    </ul>
+                </div>
+
+                <!-- Vacantes -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-500 rounded-lg p-3">
+                            <span class="text-white text-xl">💼</span>
+                        </div>
+                        <h3 class="ml-3 text-lg font-semibold">Vacantes & Postulaciones</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>✅ Publicación de vacantes</li>
+                        <li>✅ Sistema de postulaciones</li>
+                        <li>✅ Estados de seguimiento</li>
+                        <li>✅ Gestión por empresa</li>
+                    </ul>
+                </div>
+
+                <!-- Informes -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-500 rounded-lg p-3">
+                            <span class="text-white text-xl">📋</span>
+                        </div>
+                        <h3 class="ml-3 text-lg font-semibold">Informes de Práctica</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>✅ Calificaciones (1-7)</li>
+                        <li>✅ Comentarios detallados</li>
+                        <li>✅ Habilidades desarrolladas</li>
+                        <li>✅ Sistema de recomendaciones</li>
+                    </ul>
+                </div>
+
+                <!-- Notificaciones -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-orange-500 rounded-lg p-3">
+                            <span class="text-white text-xl">🔔</span>
+                        </div>
+                        <h3 class="ml-3 text-lg font-semibold">Notificaciones</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>✅ Mensajería interna</li>
+                        <li>✅ Tipos de notificación</li>
+                        <li>✅ Estado leído/no leído</li>
+                        <li>✅ Comunicación automática</li>
+                    </ul>
+                </div>
+
+                <!-- Estadísticas -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-500 rounded-lg p-3">
+                            <span class="text-white text-xl">📊</span>
+                        </div>
+                        <h3 class="ml-3 text-lg font-semibold">Dashboard</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>✅ Métricas en tiempo real</li>
+                        <li>✅ Promedio calificaciones</li>
+                        <li>✅ Tasa de éxito</li>
+                        <li>✅ Estadísticas generales</li>
+                    </ul>
+                </div>
+
+                <!-- Stack Tecnológico -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-700 rounded-lg p-3">
+                            <span class="text-white text-xl">⚡</span>
+                        </div>
+                        <h3 class="ml-3 text-lg font-semibold">Stack Moderno</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>✅ Django REST Framework</li>
+                        <li>✅ React + TypeScript</li>
+                        <li>✅ Tailwind CSS</li>
+                        <li>✅ SQLite/PostgreSQL</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- API Status -->
+            <div class="mt-8 bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold mb-4">🔌 Estado de la API</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-green-600 font-semibold">Usuarios</div>
+                        <div class="text-sm text-green-700">/api/usuarios/</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-green-600 font-semibold">Vacantes</div>
+                        <div class="text-sm text-green-700">/api/vacantes/</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-green-600 font-semibold">Informes</div>
+                        <div class="text-sm text-green-700">/api/informes/</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-green-600 font-semibold">Notificaciones</div>
+                        <div class="text-sm text-green-700">/api/notificaciones/</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
